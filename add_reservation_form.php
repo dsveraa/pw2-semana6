@@ -29,6 +29,10 @@ require 'connection.php';
                         <option value="Miami">Miami</option>
                     </select>
                 </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" for="travel_date">Fecha de viaje</label>
+                    <input type="date" class="form-control" name="travel_date" id="travel_date" required>
+                </div>
             </div>
             <button type="submit" name="search" class="btn btn-primary">Buscar</button>
         </form>
@@ -37,9 +41,10 @@ require 'connection.php';
             if (isset($_POST['search'])) {
                 $origin = $_POST['origin'];
                 $destination = $_POST['destination'];
+                $travel_date = $_POST['travel_date'];
     
-                $stmt = $conn->prepare("SELECT * FROM vuelo WHERE origen=? AND destino=?");
-                $stmt->bind_param("ss", $origin, $destination);
+                $stmt = $conn->prepare("SELECT * FROM vuelo WHERE origen=? AND destino=? AND fecha=?");
+                $stmt->bind_param("sss", $origin, $destination, $travel_date);
                 $stmt->execute();
     
                 $result = $stmt->get_result();
@@ -67,7 +72,7 @@ require 'connection.php';
                         echo '</div>';
                     }
                 } else {
-                    echo "No se encontraron coincidencias";
+                    echo "<br>No se encontraron coincidencias";
                 }
                 
                 $stmt->close();
